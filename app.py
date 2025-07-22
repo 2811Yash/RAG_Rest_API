@@ -9,7 +9,8 @@ from google.api_core import retry
 import os
 from fastapi.responses import JSONResponse
 
-os.environ["GOOGLE_API_KEY"] =  os.getenv("GOOGLE_API_KEY")  
+
+
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 app = FastAPI()
@@ -22,10 +23,10 @@ app.add_middleware(
 )
 
 class GeminiEmbeddingFunction(EmbeddingFunction):
-    def _init_(self, document_mode=True):
+    def __init__(self, document_mode=True):  
         self.document_mode = document_mode
 
-    def _call_(self, input: Documents) -> Embeddings:
+    def __call__(self, input: Documents) -> Embeddings:  
         task_type = "retrieval_document" if self.document_mode else "retrieval_query"
         retry_policy = {"retry": retry.Retry(predicate=retry.if_transient_error)}
 
@@ -44,7 +45,7 @@ db = chroma_client.get_or_create_collection(name=DB_NAME, embedding_function=emb
 
 @app.get("/")
 async def root():
-    return JSONResponse({"message": "Hello from FastAPI on Vercel! by Yash Patil"})
+    return JSONResponse({"message": "Hello from FastAPI on Render! by Yash Patil"})
 
 @app.post("/upload")
 async def upload_pdfs(files: List[UploadFile] = File(...)):
