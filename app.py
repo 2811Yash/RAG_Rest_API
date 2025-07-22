@@ -7,6 +7,7 @@ import chromadb
 from chromadb import EmbeddingFunction, Documents, Embeddings
 from google.api_core import retry
 import os
+from fastapi.responses import JSONResponse
 
 os.environ["GOOGLE_API_KEY"] = "AIzaSyAGlwJMRzm77xDD-jZlzHAR5C6El5PfGb0"  
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
@@ -40,6 +41,10 @@ DB_NAME = "pdf_qa_db"
 embed_fn = GeminiEmbeddingFunction(document_mode=True)
 chroma_client = chromadb.Client()
 db = chroma_client.get_or_create_collection(name=DB_NAME, embedding_function=embed_fn)
+
+@app.get("/")
+async def root():
+    return JSONResponse({"message": "Hello from FastAPI on Vercel! by Yash Patil"})
 
 @app.post("/upload")
 async def upload_pdfs(files: List[UploadFile] = File(...)):
