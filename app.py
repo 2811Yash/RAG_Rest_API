@@ -9,7 +9,7 @@ from google.api_core import retry
 import os
 from fastapi.responses import JSONResponse
 
-os.environ["GOOGLE_API_KEY"] = "AIzaSyAGlwJMRzm77xDD-jZlzHAR5C6El5PfGb0"  
+os.environ["GOOGLE_API_KEY"] =  os.getenv("GOOGLE_API_KEY")  
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 app = FastAPI()
